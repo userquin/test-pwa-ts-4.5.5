@@ -7,6 +7,8 @@ export const useUserStore = defineStore('user', () => {
   const savedName = ref('')
   const previousNames = ref(new Set<string>())
 
+  let initialized = false
+
   const usedNames = computed(() => Array.from(previousNames.value))
   const otherNames = computed(() => usedNames.value.filter(name => name !== savedName.value))
 
@@ -17,6 +19,11 @@ export const useUserStore = defineStore('user', () => {
    * @param name - new name to set
    */
   function setNewName(name: string) {
+    if (!initialized) {
+      initialized = true
+      return
+    }
+
     if (savedName.value)
       previousNames.value.add(savedName.value)
 

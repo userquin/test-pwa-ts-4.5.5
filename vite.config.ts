@@ -28,6 +28,7 @@ export default defineConfig({
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
+      nuxtStyle: true,
       extensions: ['vue', 'md'],
     }),
 
@@ -79,6 +80,9 @@ export default defineConfig({
 
     // https://github.com/antfu/vite-plugin-pwa
     VitePWA({
+      srcDir: 'src',
+      filename: 'sw.ts',
+      strategies: 'injectManifest',
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt', 'safari-pinned-tab.svg'],
       manifest: {
@@ -124,6 +128,11 @@ export default defineConfig({
   ssgOptions: {
     script: 'async',
     formatting: 'minify',
+    includedRoutes(routes) {
+      return routes.filter(r => !r.includes('*')).map((r) => {
+        return r.replace(/:/g, '_')
+      })
+    },
   },
 
   optimizeDeps: {
